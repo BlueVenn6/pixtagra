@@ -1,0 +1,72 @@
+# Frozen comparison oracle: App._call_api_once from commit 30a744f.
+# Test-only; never imported by production or packaging.
+def _call_api_once(self, b64, model_name, api_key, base_url="", prompt=None, max_tokens=2048, response_kind="metadata"):
+        prompt = prompt or build_prompt(self.mode_var.get())
+        ctx = self._build_api_context(model_name, api_key=api_key, base_url=base_url)
+        self._log_api_event("api_start", ctx)
+        try:
+            with requests.Session() as session:
+                session.headers.update({"Connection": "close"})
+                if ctx["transport"] in (
+                    "openai_compat", "openai_responses", "openai_compatible_negotiation"
+                ):
+                    r, j, txt, flags = self._openai_family_request(
+                        session, ctx, model_name, api_key, prompt, b64, max_tokens
+                    )
+                    self._log_api_event("api_done", ctx, **flags)
+                    if r is None:
+                        raise _RetryableApiError(f"{model_name} failed before receiving an HTTP response.", kind="no_response")
+                elif ctx["transport"] == "gemini":
+                    r = self._post_if_active(session,
+                        f"{ctx['resolved_url']}?key={api_key}",
+                        json={"contents": [{"parts": [{"text": prompt}, {"inline_data": {"mime_type": "image/jpeg", "data": b64}}]}]},
+                        timeout=(HTTP_CONNECT_TIMEOUT, HTTP_READ_TIMEOUT)
+                    )
+                    try:
+                        j = r.json() if r.status_code == 200 else None
+                    except ValueError:
+                        j = None
+                    txt = extract_api_text(j, ctx["transport"], ctx["provider"]) if j else ""
+                else:
+                    self._record_error(f"Unsupported provider: {ctx['provider']}")
+                    return None
+
+                if r.status_code != 200:
+                    msg = self._categorize_http_error(model_name, r.status_code, (r.text or "")[:300], ctx["resolved_url"])
+                    print(msg)
+                    if self._is_retryable_status(r.status_code):
+                        raise _RetryableApiError(msg, kind=f"http_{r.status_code}", retry_after=self._retry_after_seconds(r))
+                    if self._is_fatal_status(r.status_code):
+                        raise _FatalApiError(msg, status_code=r.status_code)
+                    raise _RetryableApiError(msg, kind=f"http_{r.status_code}")
+
+                if j is None:
+                    msg = f"{model_name} returned a non-JSON HTTP response."
+                    print(msg)
+                    raise _RetryableApiError(msg, kind="non_json")
+
+            print(f"[api] response_chars={len(txt or '')}")
+            if not txt:
+                keys = list(j.keys()) if isinstance(j, dict) else []
+                print(f"[api] empty text from {ctx['transport']} keys={keys}")
+                raise _RetryableApiError(f"{model_name} returned an empty response body.", kind="empty_response")
+            elif ctx["transport"] in (
+                "openai_compat", "openai_responses", "openai_compatible_negotiation"
+            ) and self._looks_like_missing_image_reply(txt):
+                raise _RetryableApiError(f"{model_name} relay did not accept the attached image after fallback retries.", kind="image_not_accepted")
+            result = extract_json(txt, require_object=True)
+            if txt and result is None:
+                msg = f"{model_name} returned text, but JSON parsing failed."
+                self._log_api_debug_preview("extract_json_failed", txt, api_key=api_key, limit=200)
+                raise _RetryableApiError(msg, kind="invalid_json")
+            issue = self._metadata_schema_issue(result) if response_kind == "metadata" else None
+            if issue:
+                raise _RetryableApiError(f"{model_name} {issue}.", kind="schema_mismatch")
+            return result
+        except requests.Timeout:
+            raise _RetryableApiError(
+                f"{model_name} timed out ({HTTP_CONNECT_TIMEOUT}s connect, {HTTP_READ_TIMEOUT}s read).",
+                kind="timeout",
+            )
+        except requests.RequestException as e:
+            raise _RetryableApiError(f"{model_name} network error: {self._redact_secrets(e, [api_key])}", kind="network_error")

@@ -1,0 +1,149 @@
+# SignPath Foundation requires artifacts built on GitHub-hosted runners from
+# this repository; locally built binaries cannot be signed. This workflow is the
+# only release path that produces a signed PixTagra.
+#
+# Ordering is not a preference here. Every stage records hashes and the next
+# stage refuses to run when they change, so each file is signed after it is
+# produced and before any stage records its hash. See
+# docs/developer/code-signing.md.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  CORPUS: .build-rc/stress-corpus-500/manifest.json
+  ARTIFACT: dist/build-a/PixTagra
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.10"
+
+      - name: Install build dependencies
+        shell: pwsh
+        run: python -m pip install -r requirements-build.txt
+
+      - name: Build the executable
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/build_windows_rc.ps1 -BuildId A
+
+      # SignPath verifies that the artifact it receives came from this workflow,
+      # so the unsigned executable is uploaded rather than read from disk.
+      - name: Upload unsigned executable
+        id: unsigned-app
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixtagra-unsigned-application
+          path: dist/build-a/PixTagra/**
+          if-no-files-found: error
+
+      - name: Sign the executable
+        id: sign-app
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: pixtagra
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: application
+          github-artifact-id: ${{ steps.unsigned-app.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 1800
+          output-artifact-directory: dist/signed-application
+
+      # The signed executable replaces the unsigned one before verification, so
+      # the hash recorded in verification.json describes the shipped binary.
+      - name: Install the signed executable
+        shell: pwsh
+        run: |
+          $zip = Get-ChildItem -Path dist/signed-application -Recurse -Filter *.zip | Select-Object -First 1
+          if (-not $zip) { throw "The signing response contained no archive." }
+          Expand-Archive -LiteralPath $zip.FullName -DestinationPath dist/signed-application/extracted -Force
+          $signed = Get-ChildItem -Path dist/signed-application/extracted -Recurse -Filter PixTagra.exe | Select-Object -First 1
+          if (-not $signed) { throw "The signing response contained no PixTagra.exe." }
+          Copy-Item -LiteralPath $signed.FullName -Destination (Join-Path $env:ARTIFACT "PixTagra.exe") -Force
+
+      - name: Generate the 500-image performance corpus
+        shell: pwsh
+        run: python scripts/generate_stress_images.py --output .build-rc/stress-corpus-500 --count 500
+
+      # -RequireSigned makes an unsigned binary fail here rather than shipping.
+      - name: Verify the signed executable
+        shell: pwsh
+        run: |
+          pwsh -NoProfile -File scripts/verify_windows_rc.ps1 `
+            -ArtifactRoot $env:ARTIFACT -BuildId A -CorpusManifest $env:CORPUS -RequireSigned
+
+      - name: Package installer and archive
+        shell: pwsh
+        run: |
+          $commit = (git rev-parse HEAD).Trim()
+          pwsh -NoProfile -File scripts/package_windows_rc.ps1 `
+            -ArtifactRoot $env:ARTIFACT `
+            -SourceCommit $commit `
+            -VerificationReport .build-rc/verify-A/verification.json `
+            -OutputDirectory dist `
+            -RequireSigned
+
+      - name: Upload unsigned installer
+        id: unsigned-installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixtagra-unsigned-installer
+          path: dist/*-setup-x64.exe
+          if-no-files-found: error
+
+      # The installer is compiled after packaging reads the executable hash, so
+      # it is signed second and its recorded hash is recomputed afterwards.
+      - name: Sign the installer
+        id: sign-installer
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: pixtagra
+          signing-policy-slug: release-signing
+          artifact-configuration-slug: installer
+          github-artifact-id: ${{ steps.unsigned-installer.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 1800
+          output-artifact-directory: dist/signed-installer
+
+      - name: Install the signed installer
+        shell: pwsh
+        run: |
+          $zip = Get-ChildItem -Path dist/signed-installer -Recurse -Filter *.zip | Select-Object -First 1
+          if (-not $zip) { throw "The signing response contained no archive." }
+          Expand-Archive -LiteralPath $zip.FullName -DestinationPath dist/signed-installer/extracted -Force
+          $signed = Get-ChildItem -Path dist/signed-installer/extracted -Recurse -Filter *-setup-x64.exe | Select-Object -First 1
+          if (-not $signed) { throw "The signing response contained no installer." }
+          Copy-Item -LiteralPath $signed.FullName -Destination (Join-Path "dist" $signed.Name) -Force
+
+      # Recomputes the installer hash and re-verifies both signatures. Fails if
+      # the executable changed after packaging, which would mean the archive no
+      # longer matches the verified binary.
+      - name: Finalize the release identity
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/finalize_release_identity.ps1 -OutputDirectory dist -RequireSigned
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pixtagra-release
+          path: |
+            dist/*-setup-x64.exe
+            dist/*-windows-x64.zip
+            dist/PixTagra-release-identity.json
+          if-no-files-found: error

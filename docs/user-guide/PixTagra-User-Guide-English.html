@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="PixTagra User Guide · Windows 0.9.1.0">
+<title>PixTagra User Guide</title>
+<style>:root{color-scheme:light;--ink:#1e293b;--muted:#526477;--accent:#047f94;--line:#dce5eb}
+*{box-sizing:border-box}
+body{margin:0;background:#eef3f6;color:var(--ink);font:16px/1.85 "Segoe UI","Microsoft YaHei","PingFang SC",sans-serif}
+.toolbar{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px max(20px,calc((100vw - 1000px)/2));background:#1e293b;color:#fff;z-index:1}
+.toolbar a{color:#fff}.toolbar strong{letter-spacing:.04em}.tools{display:flex;align-items:center;gap:20px}
+button{border:0;border-radius:6px;padding:9px 13px;font:inherit;font-size:14px;font-weight:600;background:#0794aa;color:#fff;cursor:pointer}
+article{max-width:1000px;margin:28px auto;padding:42px 48px;background:#fff;border:1px solid var(--line);border-radius:12px}
+h1{font-size:34px;line-height:1.3;margin:0 0 18px}h2{font-size:24px;margin:42px 0 18px;padding-bottom:10px;border-bottom:2px solid var(--line);scroll-margin-top:80px}h3{font-size:19px;margin-top:28px;scroll-margin-top:80px}
+p,ul,ol{margin:12px 0 18px}li{margin:7px 0}a{color:var(--accent);text-underline-offset:3px}strong{font-weight:650}
+code{font-family:Consolas,"Microsoft YaHei",monospace;font-size:.91em;background:#edf3f6;border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}
+table{border-collapse:collapse;width:100%;margin:20px 0;font-size:14px;line-height:1.75;table-layout:auto}
+th,td{border:1px solid var(--line);padding:11px 13px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+th{background:#eaf5f7;font-weight:650}tbody tr:nth-child(even){background:#f8fafc}
+nav.toc{margin:28px 0;padding:20px 24px;border:1px solid var(--line);border-radius:8px;background:#f8fbfc}
+.toc ol{list-style:none;padding:0;margin:10px 0 0;columns:2;column-gap:30px}.toc li{break-inside:avoid;margin:5px 0;font-size:14px}
+footer{color:var(--muted);font-size:13px;margin-top:36px;padding-top:15px;border-top:1px solid var(--line)}
+@media(max-width:700px){body{font-size:15px}.toolbar{position:static;flex-wrap:wrap}.tools{gap:12px}article{margin:0;padding:26px 18px;border:0;border-radius:0}h1{font-size:29px}h2{font-size:22px}.toc ol{columns:1}th,td{padding:8px;font-size:13px}}
+@media print{@page{size:A4;margin:16mm}body{background:#fff;font-size:10.5pt;line-height:1.7}.toolbar{display:none}article{max-width:none;margin:0;padding:0;border:0;border-radius:0}h1{font-size:24pt}h2{font-size:16pt;break-after:avoid;scroll-margin:0}h3{font-size:12pt;break-after:avoid}table{font-size:9pt;line-height:1.6}th,td{padding:6px 8px}tr{break-inside:avoid}thead{display:table-header-group}a{color:inherit;text-decoration:none}nav.toc{break-inside:avoid}footer{font-size:9pt}}</style>
+</head>
+<body>
+<header class="toolbar"><strong>PixTagra · 0.9.1.0</strong><div class="tools"><a href="PixTagra-使用说明-中文.html" lang="zh-CN">简体中文</a><button type="button" onclick="window.print()">Print / Save as PDF</button></div></header>
+<article>
+<h1 id="pixtagra-user-guide">PixTagra User Guide</h1>
+<p>For Windows desktop version 0.9.1.0. Updated November 12, 2026.</p>
+<p><a href="PixTagra-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E-%E4%B8%AD%E6%96%87.html">简体中文使用说明</a></p>
+<p>PixTagra generates, checks, and edits image titles, descriptions, and keywords. You can then save image copies with embedded metadata or export files for stock submission workflows. AI output is a draft for you to review. <strong>Ready</strong> means the current automated checks passed; it does not mean a stock agency has approved the content.</p>
+<nav class="toc" aria-label="Contents"><strong>Contents</strong><ol><li><a href="#quick-start">1. Quick start</a></li><li><a href="#installation-and-launch">2. Installation and launch</a></li><li><a href="#language-and-generation-modes">3. Language and generation modes</a></li><li><a href="#models-endpoints-and-api-keys">4. Models, endpoints, and API keys</a></li><li><a href="#importing-generating-and-cancelling">5. Importing, generating, and cancelling</a></li><li><a href="#quality-states-and-editing">6. Quality states and editing</a></li><li><a href="#saving-image-copies">7. Saving image copies</a></li><li><a href="#json-and-agency-exports">8. JSON and agency exports</a></li><li><a href="#workspace-recovery-and-files">9. Workspace recovery and files</a></li><li><a href="#troubleshooting">10. Troubleshooting</a></li><li><a href="#before-submitting">11. Before submitting</a></li></ol></nav><h2 id="quick-start">1. Quick start</h2>
+<ol>
+<li>Open PixTagra. Under <strong>Language / output</strong>, choose <strong>English</strong> or <strong>简体中文</strong>, then choose a generation mode.</li>
+<li>Select a model you can access and enter its API key. If you use a relay, enter the endpoint supplied by that relay.</li>
+<li>Click <strong>Test Connection</strong> and confirm that the model and endpoint work.</li>
+<li>Click <strong>Import Images</strong>. Start with a small set while learning the workflow.</li>
+<li>Check the images you want to process and click <strong>Generate metadata</strong>. Wait for generation and review to finish.</li>
+<li>Check each image's title, description, keywords, and quality messages. Correct factual mistakes, repetition, and missing information.</li>
+<li>Expand <strong>Save / Export</strong>. Use a save action for image copies, or choose a destination agency and click <strong>Export</strong> for agency files.</li>
+</ol>
+<p>Complete one small import → generate → review → save or export cycle before processing a large collection.</p>
+<h2 id="installation-and-launch">2. Installation and launch</h2>
+<ul>
+<li><strong>Installer:</strong> run the supplied PixTagra setup program, follow the wizard, and launch PixTagra from the Windows Start menu. The default location is <code>%LOCALAPPDATA%\Programs\PixTagra</code> for the current user.</li>
+<li><strong>Portable ZIP:</strong> extract the entire ZIP before running <code>PixTagra.exe</code>. Keep <code>_internal</code> and all other supplied files together. Do not copy only the EXE or run it from inside the ZIP.</li>
+<li>The application requires 64-bit Windows 10 or later. Neither distribution requires a separate Python installation.</li>
+<li>The default workspace is owned by one application instance at a time. If it is locked, close other PixTagra windows normally, then reopen the application.</li>
+</ul>
+<h2 id="language-and-generation-modes">3. Language and generation modes</h2>
+<h3 id="language">Language</h3>
+<p><strong>Language / output</strong> controls both the interface and the output language for new generation requests. English is the initial default; the application does not choose a language from your operating system. Normally saved settings are read on later launches.</p>
+<table>
+<thead>
+<tr>
+<th>Selection</th>
+<th>Newly generated titles, descriptions, and keywords</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>English</td>
+<td>English</td>
+</tr>
+<tr>
+<td>简体中文</td>
+<td>Simplified Chinese</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Changing the language does not translate existing results.</strong> For example, Chinese records stay Chinese after you choose English. Generate again with English selected if you need English content. Process each language in a separate batch to avoid language conflicts during agency export.</p>
+<h3 id="generation-modes">Generation modes</h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Suitable images</th>
+<th>Main focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>General Photography</td>
+<td>People, animals, food, buildings, interiors, travel, and everyday scenes</td>
+<td>The subject, action, visible attributes, supporting objects, and setting</td>
+</tr>
+<tr>
+<td>Commercial Background</td>
+<td>Textures, surfaces, backgrounds, negative-space compositions, and display scenes</td>
+<td>Visible backdrop, texture, identifiable material, color, lighting, and composition</td>
+</tr>
+</tbody>
+</table>
+<p>Commercial Background mode does not make an ordinary image suitable for product display. Choose the mode that fits the visible content and check material and use-case claims yourself. Keep a batch consistent in its mode where possible.</p>
+<p>Creator, Shoot location, and Date created on the home screen are optional. They are used when saving image metadata that supports those fields. Enter accurate information; these fields do not establish model releases, property releases, or rights clearance.</p>
+<h2 id="models-endpoints-and-api-keys">4. Models, endpoints, and API keys</h2>
+<h3 id="cloud-providers-and-relays">Cloud providers and relays</h3>
+<ol>
+<li>Select an image-capable model that your provider or relay actually supports. The current application's default preset is <strong>OpenAI GPT-5.6 Terra</strong>; a preset name does not guarantee availability on your endpoint.</li>
+<li>Paste the corresponding token into <strong>API Key</strong>.</li>
+<li>For a direct provider connection, you can normally leave <strong>Base URL</strong> blank to use the selected preset's endpoint. For a relay, enter the complete API address it supplies, such as <code>https://your-relay.example/v1</code>. Do not enter its account dashboard URL.</li>
+<li>Click <strong>Test Connection</strong>. Check the reported model, route, and endpoint.</li>
+<li>After a successful test, import and generate. The application also performs a connection preflight when starting a batch.</li>
+</ol>
+<p>Connection tests may send a small image test request. Generation, visual review, repair, and network retries can also add API calls. Charges and availability depend on your chosen provider.</p>
+<h3 id="credential-controls">Credential controls</h3>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save to Windows</td>
+<td>Follow the prompts to store a key in the current Windows user's credential storage</td>
+</tr>
+<tr>
+<td>Load saved key</td>
+<td>Load a stored key for this session; complete Windows Hello / PIN verification when requested</td>
+</tr>
+<tr>
+<td>Replace saved key</td>
+<td>Update the stored key for the current provider</td>
+</tr>
+<tr>
+<td>Clear session</td>
+<td>Clear the key used by the current session; this does not delete its stored Windows copy</td>
+</tr>
+<tr>
+<td>Delete saved key</td>
+<td>Remove the stored Windows key for the current provider</td>
+</tr>
+<tr>
+<td>Migrate legacy keys</td>
+<td>Follow the migration flow only when the application identifies a legacy configuration key</td>
+</tr>
+</tbody>
+</table>
+<p>A pasted key that you have not saved is for the current session. To avoid pasting it again on later launches, use <strong>Save to Windows</strong>, then <strong>Load saved key</strong> when needed. System verification depends on the credential operation. Use the correct token for each provider or endpoint. Keep keys out of image text, exports, and shared screenshots.</p>
+<h3 id="local-ollama">Local Ollama</h3>
+<ol>
+<li>Install and run Ollama on this computer or an accessible network computer with an image-capable model. The local preset in the current interface uses <code>llava</code>.</li>
+<li>On the server computer, run <code>ollama pull llava</code> to download that preset's model. If Ollama is not already running as a service, start it with <code>ollama serve</code>.</li>
+<li>Select <strong>Local Ollama</strong> in PixTagra. Enter the <strong>Local Server</strong> address: normally <code>http://localhost:11434</code> for this computer, or the reachable server address, such as <code>http://192.168.1.20:11434</code>.</li>
+<li>Click <strong>Test Connection</strong>. The Ollama route does not require a cloud API key.</li>
+</ol>
+<p>This option uses Ollama's native API, rather than an arbitrary local web page or generic <code>/v1</code> endpoint. A network server must already allow remote connections, and its port must be reachable through the network and firewall. Hardware requirements and speed depend on the model. The initial model download requires internet access and disk space.</p>
+<h2 id="importing-generating-and-cancelling">5. Importing, generating, and cancelling</h2>
+<ul>
+<li>The file picker accepts JPEG/JPG, PNG, WebP, and TIF/TIFF. <strong>Import support does not imply image-copy saving support.</strong> TIFF can be analyzed and used for metadata-file export, but safe saving of TIFF copies is not supported in this version. Safe saving of animated WebP is also unsupported.</li>
+<li>The default workspace limit is 500 images. The interface suggests 50–100 images per generation batch; reduce the batch size on slower hardware or models.</li>
+<li>Use image checkboxes, <strong>Select all</strong>, <strong>Deselect</strong>, or the status selectors under <strong>Selection / retry</strong> to choose generation targets.</li>
+<li><strong>Generate metadata</strong> processes checked, unsaved records that are unprocessed or failed. To replace completed content, use <strong>Regenerate</strong> on its card. Review items can be handled through <strong>Selection / retry</strong>.</li>
+<li><strong>Visual review</strong> adds calls to check generated content against the image. Turning it off can leave results marked for review because that check did not run. A sufficient keyword count alone does not make a record Ready.</li>
+<li>Progress includes connection preflight and processing. Wait for the current operation to finish before saving, exporting, or changing settings.</li>
+<li><strong>Cancel</strong> stops new images from being dispatched and waits for active requests, retaining results that return. Requests already sent to the provider may still be charged, and cancellation may take time.</li>
+<li>When a batch ends, use <strong>Add images</strong>, check the new unprocessed records, and generate again without redoing completed images.</li>
+</ul>
+<h2 id="quality-states-and-editing">6. Quality states and editing</h2>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Meaning and action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unprocessed</td>
+<td>No usable result yet; select it and generate</td>
+</tr>
+<tr>
+<td>Ready</td>
+<td>Current automated checks passed; still review the content before submission</td>
+</tr>
+<tr>
+<td>Needs review</td>
+<td>Text exists, but quality, review, or compliance issues remain; inspect and correct or retry</td>
+</tr>
+<tr>
+<td>Failed</td>
+<td>A request or processing step failed; check the connection, model, and source image before retrying</td>
+</tr>
+<tr>
+<td>Saved</td>
+<td>An image copy was written; this is not agency approval</td>
+</tr>
+<tr>
+<td>Saved — needs review</td>
+<td>A copy was written, but quality or compliance issues remain</td>
+</tr>
+<tr>
+<td>Source changed / missing</td>
+<td>The source path, content, or file state changed; reimport the correct source before continuing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="keyword-acceptance">Keyword acceptance</h3>
+<p>For current generated records, the final keyword policy is <strong>at least 20, a target of 25–30, and a maximum of 35</strong>. It is not a fixed requirement to produce exactly 35, and it is not a promise that every model response will pass. Fewer than 20 after removing duplicates or unsupported terms is still below the acceptance minimum. Do not add irrelevant words to reach a count.</p>
+<p>Check that the main subject appears in the first ten terms; that materials, species, and objects are accurate; and that the list avoids repetitive synonyms, invisible stories, and invented brands or locations. Records can still require review after meeting the count.</p>
+<h3 id="editing-controls">Editing controls</h3>
+<ul>
+<li>Edit the title, description, and keywords directly on an image card. Separate keywords with semicolons, commas, or line breaks. An established multiword phrase can remain one keyword.</li>
+<li><strong>Expand editor</strong> provides per-item addition, removal, deduplication, use-case ordering, and copying. Click <strong>Apply</strong> to apply that dialog's changes to the card.</li>
+<li>Check multiple images and click <strong>Add keywords</strong> to append shared terms. Add only terms that are accurate for every selected image.</li>
+<li>Use <strong>View keyword check</strong> under <strong>Selection / retry</strong> to inspect issues. Manual edits do not automatically mean that review has passed; check the resulting messages.</li>
+<li><strong>Regenerate</strong> calls the model again. When manual edits are detected, choose <strong>Only keywords</strong>, <strong>Regenerate all</strong>, or <strong>Keep manual fields</strong>.</li>
+<li><strong>Undo generation</strong> can restore the previous content when history is available and the record is unsaved. It does not undo files already written or refund API charges.</li>
+</ul>
+<p>Finish editing before saving image copies. Saved cards lock their editors. To process one again, retain any text you need, remove that record, and reimport the original image.</p>
+<h2 id="saving-image-copies">7. Saving image copies</h2>
+<p>Expand <strong>Save / Export</strong> and use the <strong>Image copies</strong> controls.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Scope and output location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Save selected</td>
+<td>Checked records; normally saved beside each source image</td>
+</tr>
+<tr>
+<td>Save ready</td>
+<td>Records passing the current quality checks across the workspace, regardless of checkboxes; normally saved beside their sources</td>
+</tr>
+<tr>
+<td>Save all</td>
+<td>Records across the workspace that have not failed processing; may include incomplete or review-needed metadata; normally saved beside their sources</td>
+</tr>
+<tr>
+<td>Save to folder</td>
+<td>Checked records; choose a parent directory and the application creates an <code>SEO_Ready_date_time</code> subfolder</td>
+</tr>
+</tbody>
+</table>
+<p>Saving creates new image copies and does not overwrite source images. Output filenames are normally based on titles, with collision avoidance. JPEG, PNG, and static WebP use their respective supported metadata-writing paths. Fields visible in other software can differ by format and viewer.</p>
+<p><strong>Save selected, Save all, and Save to folder do not guarantee that every quality issue has been filtered out.</strong> Use <strong>Save ready</strong> to save only records passing automated checks. Review warnings can remain after a successful write. The output folder name <code>SEO_Ready</code> is not a quality certification.</p>
+<h2 id="json-and-agency-exports">8. JSON and agency exports</h2>
+<h3 id="json">JSON</h3>
+<ul>
+<li><strong>JSON</strong> exports cached metadata records, including records that may be incomplete or need review, for retaining text and inspection details.</li>
+<li><strong>JSON ready</strong> exports only records that currently pass quality checks.</li>
+<li>Neither embeds images nor filters by image checkboxes. These are not universal agency submission templates. The current interface has no button to import exported JSON back as a workspace.</li>
+</ul>
+<h3 id="agency-destination-menu">Agency destination menu</h3>
+<ol>
+<li>Expand <strong>Save / Export</strong> and choose a destination under <strong>Metadata files</strong>.</li>
+<li>Read its hint. If the button shows <strong>Export (blocked: …)</strong>, correct the reported records first.</li>
+<li>Click <strong>Export</strong>, respond to quality and rights-review prompts, and choose an output location. Alamy asks for a parent folder.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Destination</th>
+<th>What this version exports</th>
+<th>How to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shutterstock · CSV</td>
+<td>CSV with the destination's configured columns</td>
+<td>This application requires English metadata for this route. Use matching image filenames and check categories and content flags in the submission portal</td>
+</tr>
+<tr>
+<td>Adobe Stock · CSV</td>
+<td>CSV with Filename, Title, Keywords, Category, and Releases</td>
+<td>The application checks fields such as title and filename length. Confirm categories and release files in the portal; no release is created automatically</td>
+</tr>
+<tr>
+<td>Alamy · IPTC JPEG</td>
+<td>JPEG copies with English IPTC metadata, plus <code>metadata.json</code></td>
+<td>JPEG source images only, with no format conversion. The English title becomes the caption; the full description stays in JSON. Upload the JPEG copies</td>
+</tr>
+<tr>
+<td>Getty/iStock · DeepMeta CSV</td>
+<td>English CSV for the DeepMeta 4 workflow</td>
+<td>Import through DeepMeta and confirm keyword matches. This is not a claim that the Getty portal directly accepts this CSV</td>
+</tr>
+<tr>
+<td>VCG · Manual entry reference</td>
+<td>Reference CSV with Chinese column headings</td>
+<td>For manual entry, not a confirmed official upload template. The first five terms are suggested core keywords to confirm in the contributor portal</td>
+</tr>
+</tbody>
+</table>
+<p>These are the output workflows provided by the current application. Account access, portal import, and actual submission outcomes still need confirmation in your contributor workflow.</p>
+<h3 id="three-important-export-details">Three important export details</h3>
+<ul>
+<li><strong>Agency export does not filter by image checkboxes.</strong> It checks workspace records with both a title and a description. One blocking error can prevent the whole export. To export a subset, first retain needed text or export JSON as a reference, then remove unrelated records from the workspace. Deselecting them does not exclude them from export.</li>
+<li>CSV uses the filenames of the imported images. Ordinary saved image copies may be renamed from their titles. If you upload those copies, make the CSV filenames match the actual uploaded files. Duplicate filenames from different folders also cause conflicts; resolve them and reimport first.</li>
+<li>Export does not automatically translate text or add keywords. Current generated records with fewer than 20 or more than 35 final keywords block agency export. Some softer warnings can be accepted to continue, but that does not clear the underlying issue.</li>
+</ul>
+<h2 id="workspace-recovery-and-files">9. Workspace recovery and files</h2>
+<p>PixTagra saves workspace records, including source paths, metadata, selections, and processing state. Use <strong>Resume Session</strong> on the home screen when available. <strong>Home</strong> itself does not clear the workspace.</p>
+<p>Sources must remain at their original paths and must not be replaced. Recovery does not contain image bytes or restore an API key. Default settings and workspace files are under <code>%USERPROFILE%\.picture_seo_studio</code>, a directory name retained for compatibility. Do not delete it as disposable build output.</p>
+<p><strong>Remove</strong> removes a record from the workspace. <strong>Clear</strong> clears the current workspace. Neither deletes source images from disk. Save needed copies and text before using either action. Close the application normally; if it is waiting for active requests or writes, let them finish.</p>
+<h2 id="troubleshooting">10. Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>401 / 403</td>
+<td>Match the provider, endpoint, token, and model permissions; do not mix keys from different relays</td>
+</tr>
+<tr>
+<td>404 / model not found</td>
+<td>Confirm the endpoint path and model availability on that provider; a dropdown preset alone is not proof</td>
+</tr>
+<tr>
+<td>Timeouts, 429, or server errors</td>
+<td>Check network connectivity, provider status, and rate limits; reduce the batch size. Retrying can add calls</td>
+</tr>
+<tr>
+<td>Local connection fails</td>
+<td>Check that Ollama is running, <code>llava</code> is installed, the address and port are correct, and the server is reachable</td>
+</tr>
+<tr>
+<td>Connection works but generation does not start</td>
+<td>Select unprocessed or failed records. Check workspace locks, write permissions, and source files. Connection success does not establish workspace access</td>
+</tr>
+<tr>
+<td>Too few keywords or Needs review</td>
+<td>Inspect the review reasons and correct or regenerate from visible evidence; do not add unsupported filler</td>
+</tr>
+<tr>
+<td>Existing text stays Chinese after choosing English</td>
+<td>Language switching does not translate records; generate again with English selected</td>
+</tr>
+<tr>
+<td>Export is disabled</td>
+<td>Finish active operations and inspect the destination hint for language, count, title, filename, or duplicate-name errors</td>
+</tr>
+<tr>
+<td>TIFF saving fails</td>
+<td>Safe TIFF-copy saving is unsupported; retain the original and use JSON or an applicable CSV export</td>
+</tr>
+<tr>
+<td>Cannot find saved images</td>
+<td>Check the completion message. Ordinary saves are normally beside the sources; Save to folder uses an <code>SEO_Ready_…</code> subfolder under the selected parent</td>
+</tr>
+<tr>
+<td>Saved text cannot be edited</td>
+<td>Saved cards lock their editors. Retain needed text, remove the record, and reimport the original</td>
+</tr>
+</tbody>
+</table>
+<h2 id="before-submitting">11. Before submitting</h2>
+<p>Check that the text matches the image, keywords are supported, and filenames match. Confirm categories, releases, editorial use, and AI disclosure where applicable in the destination platform. PixTagra assists with metadata and output files; you remain responsible for the final content review and submission.</p>
+
+<footer>PixTagra · 0.9.1.0 · 2026-11-12</footer>
+</article>
+</body>
+</html>

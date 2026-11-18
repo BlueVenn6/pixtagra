@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "annotation_method": "Agent visual inspection of supplied/local images, fixed before this evaluation. These are narrow regression cases, not a representative commercial accuracy estimate.",
+  "cases": [
+    {"id":"opera", "file":"118450a7-bf04-410e-adea-57fa39932a98.png", "split":"previously_used",
+     "supported":["chinese opera","painted face","headdress","red lantern","dragon motif","illustration"],
+     "unsupported":["snow","beach","laptop","soccer ball","medical equipment","photograph"],
+     "uncertain":["sichuan opera"]},
+    {"id":"portrait", "file":"bac4c35f-e7c2-4f13-8216-69acb1209d66.png", "split":"previously_used",
+     "supported":["anime portrait","dark hair","amber eyes","tassel","torii gate","moon"],
+     "unsupported":["snowman","surfboard","airplane","skyscraper","photograph","official artwork"]},
+    {"id":"toy", "file":"tests/fixtures/metadata_benchmark/01_felt_horse.jpg", "split":"new_visual_review_case",
+     "supported":["horse toy","wooden table","saddle","brown","cream","stuffed animal"],
+     "unsupported":["live horse","snow","sushi","computer","ocean","bicycle"]},
+    {"id":"food", "file":"tests/fixtures/metadata_benchmark/02_food.jpg", "split":"new_visual_review_case",
+     "supported":["hands","egg","bowl","rice","food preparation","close up"],
+     "unsupported":["visible face","cake","forest","sunglasses","car","snow"]},
+    {"id":"landscape", "file":"tests/fixtures/metadata_benchmark/03_landscape.jpg", "split":"new_visual_review_case",
+     "supported":["mountains","lake","trees","grass","blue sky","water"],
+     "unsupported":["city skyline","boat","desert","restaurant","crowd","traffic"]},
+    {"id":"water_background", "file":"tests/fixtures/metadata_benchmark/04_background.jpg", "split":"new_visual_review_case",
+     "supported":["shallow water","sand","ripples","sunlight","beige","texture"],
+     "unsupported":["stone wall","marble slab","snow","grass","red brick","fabric"],
+     "title":"Rough Beige Stone Wall Texture in Soft Natural Light",
+     "description":"A rough stone wall fills the frame with a dry beige surface and irregular mineral patterns. Soft light reveals the solid rock texture, creating an uncluttered background with open space across the natural masonry.",
+     "caption_verdicts":{"title":"unsupported","description":"unsupported"}}
+  ]
+}

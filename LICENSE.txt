@@ -1,0 +1,11 @@
+PixTagra is released under the MIT License. The complete license text is in the
+`LICENSE` file at the repository root.
+
+Copyright (c) 2026 Nera Venn
+
+Third-party components bundled with the Windows build (Python, CustomTkinter,
+Pillow, cryptography and others) remain subject to their own licenses, which are
+included in the distribution under `_internal`. The MIT License does not alter
+the rights those licenses grant you or the conditions they impose.
+
+Support: neravenn@gmail.com

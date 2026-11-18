@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "created_date": "2026-11-08",
+  "annotation_origin": "Codex directly inspected the five original images. This is not independent human-expert annotation.",
+  "purpose": "Predeclared quality anchors and relation calibration; not an exhaustive keyword answer list.",
+  "blindness": "Do not send this reference or case-specific expected answers to the candidate generator.",
+  "acceptance": {
+    "minimum_final_keywords_per_language": 20,
+    "target": [25, 30],
+    "maximum_final_keywords_per_language": 35,
+    "core_subject_and_distinctive_detail_in_first": 10,
+    "obvious_unsupported_claims_allowed": 0,
+    "unresolved_review_decisions_allowed": 0
+  },
+  "cases": [
+    {
+      "id": 1,
+      "image": ".build-rc/p0p1-20261107/benchmark/images/01-cow.jpg",
+      "sha256": "bd645634cc290ad2cba0d0544aea02347edb8510dbc69586d367afc68bafd5ed",
+      "subject": {"en": "cattle", "zh": "牛"},
+      "distinctive_top10": ["two animals", "brown-and-white coat or visible ear tags"],
+      "visible_anchors": ["two cattle lying on grass", "brown-and-white coats", "yellow ear tags", "white facial marking", "sloping grassy field", "cloudy sky", "small distant tree group"],
+      "unsupported_claims": ["dairy use or milk production", "precise breed", "exact location", "grazing as an observed action", "a continuous tree line"],
+      "relation_examples": [
+        {"a": "cattle", "b": "livestock", "relation": "broader", "action": "may_coexist", "reason": "Visible subject and ordinary domestic-farm category; neither establishes dairy use."},
+        {"a": "livestock", "b": "farm animals", "relation": "equivalent_in_this_context", "action": "merge", "reason": "Same generic domestic-farm category in this scene."},
+        {"a": "brown-and-white coat", "b": "ear tags", "relation": "different_facet", "action": "may_coexist", "reason": "Coat coloration and attached identification are independent details."},
+        {"a": "pasture", "b": "grassy field", "relation": "equivalent_in_this_context", "action": "merge", "reason": "Both index the same grassy setting without an additional grounded distinction."}
+      ]
+    },
+    {
+      "id": 8,
+      "image": ".build-rc/p0p1-20261107/benchmark/images/08-interior.jpg",
+      "sha256": "f9a3a344392a22487587ec1d21dc13fd966c68978a078a3af8b805569a260615",
+      "subject": {"en": "bedroom", "zh": "卧室"},
+      "distinctive_top10": ["wood-paneled interior", "bed or model sailboat"],
+      "visible_anchors": ["bed with patterned cover", "blue garment on the bed", "teddy bear", "dresser and framed mirror", "wooden rocking chair", "model sailboat", "curtains", "potted plants", "open wardrobe with hanging clothes", "wood-paneled walls and floor"],
+      "unsupported_claims": ["specific historical period", "hotel or museum ownership", "exact country", "living occupants", "precise wood species"],
+      "relation_examples": [
+        {"a": "bedroom", "b": "interior", "relation": "broader", "action": "may_coexist", "reason": "Room function and interior-setting category are different index levels."},
+        {"a": "rocking chair", "b": "model sailboat", "relation": "different_object", "action": "may_coexist", "reason": "Separate visible objects."},
+        {"a": "wood grain", "b": "warm lighting", "relation": "different_facet", "action": "may_coexist_if_individually_supported", "reason": "Surface structure does not equal illumination."}
+      ]
+    },
+    {
+      "id": 6,
+      "image": ".build-rc/p0p1-20261107/benchmark/images/06-aircraft.jpg",
+      "sha256": "93c7d9e4330838b2aa1f7985a11dcc19bc6ab7c37101ece712abaf7b65a37bfd",
+      "subject": {"en": "passenger aircraft", "zh": "客机"},
+      "distinctive_top10": ["extended landing gear", "view from below"],
+      "visible_anchors": ["airborne passenger jet", "two underwing engines", "extended landing gear and wheels", "wings and tail", "red wingtip", "dark tail with crown emblem", "sky behind aircraft", "underside view"],
+      "unsupported_claims": ["definite takeoff or landing phase", "precise airport", "precise aircraft model without diagnostic confirmation", "altitude", "destination", "airline branding as commercial keyword"],
+      "relation_examples": [
+        {"a": "airplane", "b": "aircraft", "relation": "equivalent_in_this_context", "action": "merge", "reason": "Alternate labels for the same aircraft rather than separate useful attributes."},
+        {"a": "passenger jet", "b": "aviation", "relation": "broader", "action": "may_coexist", "reason": "Vehicle class and transport field can serve distinct searches."},
+        {"a": "extended landing gear", "b": "landing", "relation": "unproven_event_inference", "action": "reject_event_claim", "reason": "Visible gear configuration does not prove a landing event."}
+      ]
+    },
+    {
+      "id": 10,
+      "image": ".build-rc/p0p1-20261107/benchmark/images/10-cat.jpg",
+      "sha256": "c6bb746ca15037387a07b79731269413e3d2e26f05b0711a8f958c48f02c0092",
+      "subject": {"en": "cat", "zh": "猫"},
+      "distinctive_top10": ["red necktie", "striped shirt"],
+      "visible_anchors": ["cat wearing a striped collared shirt", "red striped necktie", "tabby-and-white fur", "yellow-green eyes", "pink nose", "white whiskers", "pointed ears", "close portrait", "vertical frame", "dark green patterned background"],
+      "unsupported_claims": ["precise breed", "business occupation", "owner identity", "direct eye contact as a definite observation", "emotional state as fact"],
+      "relation_examples": [
+        {"a": "cat", "b": "pet", "relation": "broader", "action": "may_coexist", "reason": "Specific animal and ordinary domestic-pet category."},
+        {"a": "red necktie", "b": "striped shirt", "relation": "different_object", "action": "may_coexist", "reason": "Two independently visible clothing items."},
+        {"a": "necktie", "b": "tie", "relation": "equivalent_in_this_context", "action": "merge", "reason": "Same accessory; wording variation adds no distinct concept."},
+        {"a": "green eyes", "b": "pink nose", "relation": "different_facet", "action": "may_coexist", "reason": "Different anatomical attributes, not interchangeable descriptions."}
+      ]
+    },
+    {
+      "id": 5,
+      "image": ".build-rc/p0p1-20261107/benchmark/images/05-food.jpg",
+      "sha256": "22eaba0e35f9e452c8e208aabb570dcb5f92fe16d0d30cc28e44a22d613370d6",
+      "subject": {"en": "plated meal", "zh": "盘装餐食"},
+      "distinctive_top10": ["broccoli", "browned meat or orange fried strips"],
+      "visible_anchors": ["browned meat portions", "broccoli florets and stems", "orange fried strips with browned edges", "yellow-brown sauce", "white round plate", "metal fork", "blue textured cloth", "close elevated view"],
+      "unsupported_claims": ["exact meat species or cut", "exact sauce ingredients", "savory taste", "organic or healthy as established fact", "woven structure without resolved evidence", "precise cuisine or restaurant"],
+      "relation_examples": [
+        {"a": "blue fabric", "b": "woven fabric", "relation": "different_facet_but_second_uncertain", "action": "reject_uncertain_material_structure", "reason": "Color and weave are different facets, but the reviewed image does not establish a weave confidently enough."},
+        {"a": "broccoli", "b": "vegetables", "relation": "broader", "action": "may_coexist", "reason": "Specific vegetable and ordinary food category; not permission for a synonym chain."},
+        {"a": "white plate", "b": "round plate", "relation": "different_facet", "action": "may_coexist_if_search_useful", "reason": "Color and shape differ; weak phrase permutations still require a search-value check."},
+        {"a": "plated meal", "b": "plated food", "relation": "equivalent_in_this_context", "action": "merge", "reason": "The same serving-level concept restated."}
+      ]
+    }
+  ]
+}

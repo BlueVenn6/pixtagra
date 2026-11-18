@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.claude/settings.local.json
+build/
+dist/
+.build-rc/
+
+# Staged deletion candidates (generated build output and stray screenshots).
+# Safe to delete manually; kept out of version control so a build starts clean.
+cleanup-pending-*/
+118450a7-bf04-410e-adea-57fa39932a98.png
+bac4c35f-e7c2-4f13-8216-69acb1209d66.png
