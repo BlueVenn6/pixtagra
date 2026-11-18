@@ -62,18 +62,17 @@ A Windows desktop tool for generating, reviewing, editing and exporting stock-ph
 
 ## 开发 / Development
 
+PixTagra 用 Python 3.12 和 CustomTkinter 编写。克隆后安装依赖即可运行：
+
 ```powershell
 python -m pip install -r requirements.txt
-python -m py_compile pixtagra.py pixtagra_models.py
+python pixtagra.py
+```
+
+测试：
+
+```powershell
 python -m pytest -q -p no:cacheprovider
 ```
 
-受控 Windows 构建使用 `requirements-build.txt` 中固定的依赖版本和 `PixTagra.spec`：
-
-```powershell
-pwsh -File scripts/build_windows_rc.ps1 -BuildId A
-pwsh -File scripts/verify_windows_rc.ps1 -ArtifactRoot dist/build-a/PixTagra -BuildId A
-pwsh -File scripts/package_windows_rc.ps1 -ArtifactRoot dist/build-a/PixTagra -SourceCommit <commit> -VerificationReport .build-rc/verify-A/verification.json
-```
-
-代码签名流程见 [docs/developer/code-signing.md](docs/developer/code-signing.md)。
+构建脚本、验收流程与签名说明放在 `scripts/` 和 `docs/developer/`，面向维护者而非使用者。
